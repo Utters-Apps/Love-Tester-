@@ -11,8 +11,8 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
     <style>
         :root {
-            --bg1: #15061c;
-            --bg2: #28003a;
+            --bg1: #1a082b;
+            --bg2: #3a005c;
             --accent: #ff4d8d;
             --accent2: #8b5cf6;
             --muted: #cdbfe8;
@@ -30,7 +30,17 @@
             justify-content: center;
             align-items: center;
             padding: 20px;
-            overflow: hidden; /* Evita a rolagem na tela inteira */
+            overflow: hidden;
+            transition: background 0.5s ease;
+        }
+        
+        body.friend-theme {
+            --bg1: #082b2b;
+            --bg2: #005c5c;
+            --accent: #4dffc4;
+            --accent2: #5cb6f6;
+            --muted: #bfe8cd;
+            --text: #f5fffd;
         }
 
         .device {
@@ -43,7 +53,7 @@
             box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
-            overflow: hidden; /* Mantém o conteúdo dentro das bordas arredondadas */
+            overflow: hidden;
             position: relative;
         }
 
@@ -61,6 +71,7 @@
             padding: 0.75rem;
             border-radius: 0.75rem;
             box-shadow: 0 10px 20px rgba(255, 77, 141, 0.1);
+            transition: all 0.3s ease;
         }
 
         .content-container {
@@ -74,7 +85,7 @@
             inset: 0;
             padding: 1.5rem;
             transition: opacity 0.3s ease, transform 0.3s ease;
-            overflow-y: auto; /* Permite rolar apenas o conteúdo da tela ativa */
+            overflow-y: auto;
         }
         
         .screen.hidden {
@@ -116,10 +127,11 @@
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
         }
 
         .btn-primary {
-            background: linear-gradient(135deg, var(--accent), #ff82b5);
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
             color: white;
             box-shadow: 0 10px 20px rgba(255, 77, 141, 0.15);
         }
@@ -130,7 +142,7 @@
         }
 
         .btn-secondary {
-            background: linear-gradient(135deg, #5b21b6, var(--accent2));
+            background: linear-gradient(135deg, var(--accent2), var(--accent));
             color: white;
             box-shadow: 0 10px 20px rgba(91, 33, 182, 0.15);
         }
@@ -151,6 +163,16 @@
             background: var(--card-bg);
             transform: translateY(-2px);
         }
+        
+        .btn-animated {
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 141, 0.7); }
+            70% { transform: scale(1.05); box-shadow: 0 0 0 15px rgba(255, 77, 141, 0); }
+            100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(255, 77, 141, 0); }
+        }
 
         .card {
             background: var(--card-bg);
@@ -165,9 +187,10 @@
             font-weight: 700;
             letter-spacing: 1px;
             text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
-            background: -webkit-linear-gradient(45deg, var(--accent), #ff82b5);
+            background: -webkit-linear-gradient(45deg, var(--accent), var(--accent2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            transition: all 0.5s ease-out;
         }
 
         .bottom-nav {
@@ -209,7 +232,7 @@
         }
 
         .chip.active {
-            background: linear-gradient(135deg, var(--accent), #ff82b5);
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
             color: white;
             border: none;
             box-shadow: 0 8px 16px rgba(255, 77, 141, 0.15);
@@ -248,6 +271,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
             transform: scale(0.9);
             transition: transform 0.3s ease;
+            position: relative;
         }
         
         .modal.open .modal-content {
@@ -257,6 +281,73 @@
         .error-message {
           color: var(--accent);
           font-weight: 600;
+        }
+        
+        .heart-particle-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        
+        .heart-particle {
+            position: absolute;
+            top: 100%;
+            font-size: 1rem;
+            animation: rise-and-fade 4s ease-in forwards;
+            opacity: 0;
+            will-change: transform, opacity;
+        }
+        
+        @keyframes rise-and-fade {
+            0% { transform: translateY(0) scale(0); opacity: 0; }
+            10% { transform: translateY(-5%) scale(1); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+
+        .photo-preview {
+            width: 100%;
+            height: 120px;
+            border-radius: 0.75rem;
+            object-fit: cover;
+            object-position: center;
+            border: 1px solid var(--border-color);
+            margin-top: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: none;
+        }
+        
+        .photo-preview.active {
+            display: block;
+        }
+        
+        .photo-upload-label {
+            display: block;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 0.75rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .photo-upload-label:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        .photo-upload-label i {
+            margin-right: 0.5rem;
+        }
+        
+        /* Ajustes para o modal de personalidade */
+        #modalPersonality .modal-content {
+            max-height: 80%;
+            overflow-y: auto;
+        }
+        .modal-content-container {
+            max-height: 60vh;
+            overflow-y: auto;
+            padding: 1rem;
         }
     </style>
 </head>
@@ -274,6 +365,8 @@
                 <i class="fas fa-question-circle"></i>
             </button>
         </header>
+        
+        <div id="heartParticles" class="heart-particle-container"></div>
 
         <main class="content-container">
             <!-- Tela Inicial -->
@@ -281,13 +374,16 @@
                 <div class="flex flex-col items-center justify-center text-center p-4 gap-6">
                     <div class="logo-icon text-5xl p-6 rounded-3xl shadow-xl">💞</div>
                     <h1 class="text-3xl font-bold">Descubra a sua química</h1>
-                    <p class="text-sm text-gray-400">Escolha entre o modo Simples ou Avançado para calcular a compatibilidade, salve e compartilhe o resultado.</p>
+                    <p class="text-sm text-gray-400">Escolha um teste para calcular a compatibilidade, salve e compartilhe o resultado.</p>
                     <div class="flex flex-col gap-4 w-full">
                         <button class="btn-base btn-primary w-full" id="openSimple">
-                            <i class="fas fa-heart"></i> Amor Simples
+                            <i class="fas fa-heart"></i> Conexão de Almas
                         </button>
                         <button class="btn-base btn-secondary w-full" id="openAdvanced">
-                            <i class="fas fa-gem"></i> Amor Avançado
+                            <i class="fas fa-gem"></i> Química Perfeita
+                        </button>
+                        <button class="btn-base w-full" id="openFriend" style="background: linear-gradient(135deg, #1e90ff, #ff8c00); color: white;">
+                            <i class="fas fa-handshake"></i> Vibe de Amizade
                         </button>
                     </div>
                 </div>
@@ -306,11 +402,11 @@
                         <input id="s_nome1" type="text" placeholder="Ex.: Ana" class="rounded-xl">
                     </div>
                     <div class="field">
-                        <label for="s_nome2">Nome do Crush</label>
+                        <label for="s_nome2">Nome da Outra Pessoa</label>
                         <input id="s_nome2" type="text" placeholder="Ex.: Bruno" class="rounded-xl">
                     </div>
                     <div class="flex gap-2">
-                        <button class="btn-base btn-primary flex-1" id="calcSimple">
+                        <button class="btn-base btn-primary flex-1 btn-animated" id="calcSimple">
                             <i class="fas fa-calculator"></i> Calcular
                         </button>
                         <button class="btn-base btn-ghost" id="swapSimple">
@@ -323,7 +419,7 @@
                 </div>
                 <div class="card mt-6 text-center space-y-4">
                     <div id="badgeSimple" class="text-sm text-gray-400 font-semibold">—</div>
-                    <div id="percentSimple" class="result-percent text-8xl">—</div>
+                    <div id="percentSimple" class="result-percent text-8xl">0</div>
                     <div id="msgSimple" class="text-sm text-gray-400">Preencha os nomes e toque em Calcular.</div>
                     <div class="flex gap-2 mt-4">
                         <button class="btn-base btn-primary flex-1" id="saveSimple">
@@ -344,32 +440,46 @@
                             <label for="a_nome1">Seu Nome</label>
                             <input id="a_nome1" type="text" placeholder="Ex.: Carolina">
                         </div>
-                        <div class="field">
+                        <div class="field mt-4">
                             <label>Sua Personalidade</label>
-                            <!-- Botão para abrir o modal de personalidade -->
                             <button class="btn-base btn-ghost w-full" id="openPersModal1">
                                 <i class="fas fa-sliders-h"></i> Escolher Personalidade
                             </button>
                             <div id="selectedPers1" class="flex flex-wrap gap-1 mt-2 text-xs text-gray-400"></div>
                         </div>
+                        <div class="field mt-4">
+                            <label for="a_foto1">Sua Foto</label>
+                            <label for="a_foto1" class="photo-upload-label">
+                                <i class="fas fa-camera"></i> Selecionar Foto
+                            </label>
+                            <input id="a_foto1" type="file" accept="image/*" class="hidden">
+                            <img id="a_foto1_preview" class="photo-preview rounded-xl" alt="Preview da Foto 1">
+                        </div>
                     </div>
                     <div class="flex-1">
                         <div class="field">
-                            <label for="a_nome2">Nome do Crush</label>
+                            <label for="a_nome2">Nome da Outra Pessoa</label>
                             <input id="a_nome2" type="text" placeholder="Ex.: Lucas">
                         </div>
-                        <div class="field">
-                            <label>Personalidade do Crush</label>
-                            <!-- Botão para abrir o modal de personalidade -->
+                        <div class="field mt-4">
+                            <label>Personalidade da Outra Pessoa</label>
                             <button class="btn-base btn-ghost w-full" id="openPersModal2">
                                 <i class="fas fa-sliders-h"></i> Escolher Personalidade
                             </button>
                             <div id="selectedPers2" class="flex flex-wrap gap-1 mt-2 text-xs text-gray-400"></div>
                         </div>
+                        <div class="field mt-4">
+                            <label for="a_foto2">Foto da Outra Pessoa</label>
+                            <label for="a_foto2" class="photo-upload-label">
+                                <i class="fas fa-camera"></i> Selecionar Foto
+                            </label>
+                            <input id="a_foto2" type="file" accept="image/*" class="hidden">
+                            <img id="a_foto2_preview" class="photo-preview rounded-xl" alt="Preview da Foto 2">
+                        </div>
                     </div>
                 </div>
                 <div class="flex gap-2 mt-4">
-                    <button class="btn-base btn-primary flex-1" id="calcAdvanced">
+                    <button class="btn-base btn-primary flex-1 btn-animated" id="calcAdvanced">
                         <i class="fas fa-calculator"></i> Calcular
                     </button>
                     <button class="btn-base btn-ghost" id="clearAdvanced">
@@ -378,7 +488,7 @@
                 </div>
                 <div class="card mt-6 text-center space-y-4">
                     <div id="badgeAdvanced" class="text-sm text-gray-400 font-semibold">—</div>
-                    <div id="percentAdvanced" class="result-percent text-8xl">—</div>
+                    <div id="percentAdvanced" class="result-percent text-8xl">0</div>
                     <div id="msgAdvanced" class="text-sm text-gray-400">Selecione personalidades para um resultado mais detalhado.</div>
                     <div class="flex gap-2 mt-4">
                         <button class="btn-base btn-primary flex-1" id="saveAdvanced">
@@ -391,6 +501,44 @@
                 </div>
             </section>
             
+            <!-- Tela Modo Amigo -->
+            <section id="screenFriend" class="screen hidden">
+                <div class="space-y-4">
+                    <div class="field">
+                        <label for="f_nome1">Seu Nome</label>
+                        <input id="f_nome1" type="text" placeholder="Ex.: Pedro" class="rounded-xl">
+                    </div>
+                    <div class="field">
+                        <label for="f_nome2">Nome do Amigo(a)</label>
+                        <input id="f_nome2" type="text" placeholder="Ex.: Joana" class="rounded-xl">
+                    </div>
+                    <div class="flex gap-2">
+                        <button class="btn-base btn-primary flex-1 btn-animated" id="calcFriend">
+                            <i class="fas fa-calculator"></i> Calcular
+                        </button>
+                        <button class="btn-base btn-ghost" id="swapFriend">
+                            <i class="fas fa-exchange-alt"></i>
+                        </button>
+                        <button class="btn-base btn-ghost" id="clearFriend">
+                            <i class="fas fa-eraser"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="card mt-6 text-center space-y-4">
+                    <div id="badgeFriend" class="text-sm text-gray-400 font-semibold">—</div>
+                    <div id="percentFriend" class="result-percent text-8xl">0</div>
+                    <div id="msgFriend" class="text-sm text-gray-400">Preencha os nomes e toque em Calcular.</div>
+                    <div class="flex gap-2 mt-4">
+                        <button class="btn-base btn-primary flex-1" id="saveFriend">
+                            <i class="fas fa-download"></i> Salvar
+                        </button>
+                        <button class="btn-base btn-ghost flex-1" id="shareFriend">
+                            <i class="fas fa-share-alt"></i> Compartilhar
+                        </button>
+                    </div>
+                </div>
+            </section>
+
             <!-- Tela de Histórico -->
             <section id="screenHistory" class="screen hidden">
                 <h3 class="text-xl font-bold mb-4">Histórico de Testes</h3>
@@ -421,7 +569,10 @@
             <div class="modal-content">
                 <h3 id="modalTitle" class="text-xl font-bold text-gray-100 mb-2"></h3>
                 <p id="modalMessage" class="text-gray-300"></p>
-                <button id="modalClose" class="mt-6 btn-base btn-primary w-full">OK</button>
+                <div class="flex gap-2 mt-6">
+                    <button id="modalClose" class="btn-base btn-primary flex-1">OK</button>
+                    <button id="modalActionBtn" class="btn-base btn-ghost flex-1 hidden">Ação</button>
+                </div>
             </div>
         </div>
 
@@ -429,13 +580,16 @@
         <div id="modalTestChoice" class="modal">
             <div class="modal-content">
                 <h3 class="text-xl font-bold text-gray-100 mb-4">Escolha o Tipo de Teste</h3>
-                <p class="text-gray-300 mb-6">Qual tipo de teste de amor você gostaria de fazer?</p>
+                <p class="text-gray-300 mb-6">Qual tipo de teste você gostaria de fazer?</p>
                 <div class="flex flex-col gap-4">
                     <button id="btnSimpleChoice" class="btn-base btn-primary w-full">
-                        <i class="fas fa-heart"></i> Teste Simples
+                        <i class="fas fa-heart"></i> Conexão de Almas
                     </button>
                     <button id="btnAdvancedChoice" class="btn-base btn-secondary w-full">
-                        <i class="fas fa-gem"></i> Teste Avançado
+                        <i class="fas fa-gem"></i> Química Perfeita
+                    </button>
+                     <button id="btnFriendChoice" class="btn-base w-full" style="background: linear-gradient(135deg, #1e90ff, #ff8c00); color: white;">
+                        <i class="fas fa-handshake"></i> Vibe de Amizade
                     </button>
                 </div>
             </div>
@@ -445,8 +599,10 @@
         <div id="modalPersonality" class="modal">
             <div class="modal-content">
                 <h3 class="text-xl font-bold text-gray-100 mb-4">Escolha a Personalidade</h3>
-                <div class="flex flex-wrap gap-2 justify-center" id="persChipsContainer">
-                    <!-- Chips de personalidade serão injetados aqui via JS -->
+                <div class="modal-content-container">
+                    <div class="flex flex-wrap gap-2 justify-center" id="persChipsContainer">
+                        <!-- Chips de personalidade serão injetados aqui via JS -->
+                    </div>
                 </div>
                 <button id="btnConfirmPers" class="mt-6 btn-base btn-primary w-full">
                     Confirmar
@@ -456,56 +612,74 @@
     </div>
 
     <script>
-        // --- Gerenciamento de Telas e Navegação ---
+        // --- Screen and Navigation Management ---
         const screens = {
             home: document.getElementById('screenHome'),
             simple: document.getElementById('screenSimple'),
             advanced: document.getElementById('screenAdvanced'),
+            friend: document.getElementById('screenFriend'),
             history: document.getElementById('screenHistory')
         };
         const navTabs = document.querySelectorAll('.bottom-nav .nav-item');
         const appTitle = document.getElementById('appTitle');
+        const heartParticlesContainer = document.getElementById('heartParticles');
+        const body = document.body;
 
         const titles = {
             home: 'Love Tester',
-            simple: 'Amor Simples',
-            advanced: 'Amor Avançado',
+            simple: 'Conexão de Almas',
+            advanced: 'Química Perfeita',
+            friend: 'Vibe de Amizade',
             history: 'Histórico'
         };
 
+        const THEMES = {
+            love: {
+                bg1: '#1a082b', bg2: '#3a005c', accent: '#ff4d8d', accent2: '#8b5cf6'
+            },
+            friend: {
+                bg1: '#082b2b', bg2: '#005c5c', accent: '#5cb6f6', accent2: '#ff8c00'
+            }
+        };
+        
+        function setTheme(theme) {
+            body.style.setProperty('--bg1', theme.bg1);
+            body.style.setProperty('--bg2', theme.bg2);
+            body.style.setProperty('--accent', theme.accent);
+            body.style.setProperty('--accent2', theme.accent2);
+        }
+
         function showScreen(screenName) {
-            // Esconde todas as telas
             Object.values(screens).forEach(screen => {
                 screen.classList.remove('active');
                 screen.classList.add('hidden');
             });
-            // Ativa a tela correta
             const activeScreen = screens[screenName];
             if (activeScreen) {
                 activeScreen.classList.remove('hidden');
                 activeScreen.classList.add('active');
             }
-
-            // Atualiza o título da barra superior
             appTitle.textContent = titles[screenName] || 'Love Tester';
-
-            // Atualiza a navegação inferior, exceto o ícone de coração
             navTabs.forEach(tab => {
                 tab.classList.toggle('active', tab.dataset.target === screenName);
             });
+            
+            if (screenName === 'friend') {
+                setTheme(THEMES.friend);
+            } else {
+                setTheme(THEMES.love);
+            }
 
-            // Carrega o histórico se a tela for a de histórico
             if (screenName === 'history') {
                 renderHistory();
             }
         }
 
-        // Eventos de navegação via botões da tela inicial
         document.getElementById('openSimple').addEventListener('click', () => showScreen('simple'));
         document.getElementById('openAdvanced').addEventListener('click', () => showScreen('advanced'));
+        document.getElementById('openFriend').addEventListener('click', () => showScreen('friend'));
         document.getElementById('openHistory').addEventListener('click', () => showScreen('history'));
 
-        // Eventos de navegação via barra inferior
         document.querySelectorAll('.bottom-nav .nav-item').forEach(button => {
             button.addEventListener('click', (e) => {
                 const target = e.currentTarget.dataset.target;
@@ -517,21 +691,31 @@
             });
         });
 
-        // --- Modal Personalizado Genérico ---
+        // --- Custom Modal ---
         const modal = document.getElementById('modal');
         const modalTitle = document.getElementById('modalTitle');
         const modalMessage = document.getElementById('modalMessage');
         const modalClose = document.getElementById('modalClose');
+        const modalActionBtn = document.getElementById('modalActionBtn');
         
         let confirmAction = null;
+        let secondaryAction = null;
 
-        function showModal(title, message, callback = null, isError = false) {
+        function showModal(title, message, callback = null, isError = false, actionText = null, actionCallback = null) {
             modalTitle.textContent = title;
             modalMessage.textContent = message;
             modalTitle.classList.toggle('error-message', isError);
             
+            modalClose.textContent = 'OK';
             confirmAction = callback;
-            modalClose.textContent = callback ? 'Sim' : 'OK';
+            
+            if (actionText && actionCallback) {
+                modalActionBtn.textContent = actionText;
+                secondaryAction = actionCallback;
+                modalActionBtn.classList.remove('hidden');
+            } else {
+                modalActionBtn.classList.add('hidden');
+            }
             
             modal.classList.add('open');
         }
@@ -544,16 +728,41 @@
             }
         });
         
-        // --- Evento do botão de ajuda ---
-        document.getElementById('btnHelp').addEventListener('click', () => showModal('Sobre o App', 'Love Tester é um aplicativo simples para calcular a compatibilidade de nomes. Use o modo simples ou avançado e salve seus resultados!'));
+        modalActionBtn.addEventListener('click', () => {
+            modal.classList.remove('open');
+            if (secondaryAction) {
+                secondaryAction();
+                secondaryAction = null;
+            }
+        });
 
-        // --- Lógica do App ---
-        // Função para normalizar strings, removendo acentos e espaços extras
+        document.getElementById('btnHelp').addEventListener('click', () => {
+            showModal(
+                'Sobre o App', 
+                'Love Tester é um aplicativo divertido para calcular a compatibilidade entre nomes. Use o modo simples ou avançado, adicione fotos e salve seus resultados!',
+                null,
+                false,
+                'Tela Cheia',
+                () => {
+                    if (document.documentElement.requestFullscreen) {
+                        document.documentElement.requestFullscreen();
+                    } else if (document.documentElement.mozRequestFullScreen) { /* Firefox */
+                        document.documentElement.mozRequestFullScreen();
+                    } else if (document.documentElement.webkitRequestFullscreen) { /* Chrome, Safari & Opera */
+                        document.documentElement.webkitRequestFullscreen();
+                    } else if (document.documentElement.msRequestFullscreen) { /* IE/Edge */
+                        document.documentElement.msRequestFullscreen();
+                    }
+                }
+            );
+        });
+
+        // --- Core Logic ---
         function normalize(str) {
-            return (str || '').toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[^a-z\s]/g, '').trim();
+            if (typeof str !== 'string') return '';
+            return str.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '').replace(/[^a-z\s]/g, '').trim();
         }
 
-        // Função de cálculo de porcentagem determinística
         function deterministicPercent(a, b, seed = 0) {
             const n1 = normalize(a), n2 = normalize(b);
             if (!n1 || !n2) return null;
@@ -568,52 +777,137 @@
             h ^= h >>> 15;
             return Math.abs(h) % 101;
         }
-
-        // Banco de frases
-        const phrases = [{
-            min: 95,
-            text: ['Alma gêmea detectada! Vocês parecem destinados.', 'Encontro cósmico! Um match raro.', 'Casamento de novela — apenas jogue o buquê!']
-        }, {
-            min: 80,
-            text: ['Química poderosa — cuidem desse carinho!', 'Conexão intensa — vibe para algo sério.', 'Fácil de se apaixonar — é mágico.']
-        }, {
-            min: 65,
-            text: ['Muito compatíveis! Vale investir tempo juntos.', 'Potencial grande — comuniquem-se e floresça.', 'Combinação quente — explorem esse sentimento.']
-        }, {
-            min: 50,
-            text: ['Afinidade moderada — com um empurrão pode virar algo legal.', 'Tem boa base; tempo e diálogo ajudam.', 'Meio termo — pode surpreender com intenção.']
-        }, {
-            min: 30,
-            text: ['Compatibilidade baixa — talvez amizade com faíscas.', 'Talvez mais amizade que romance, mas tudo é possível.', 'Diferenças existentes; curiosidade pode aproximar.']
-        }, {
-            min: 0,
-            text: ['Fofo, talvez só amizade — ainda assim vale a pena conhecer.', 'Às vezes opostos se atraem — surpreenda!', 'Diferenças podem ser interessantes — descubram mais.', 'Cuidado com expectativas — aproveite o momento.']
-        }];
-
-        function pickPhrase(pct) {
-            for (const bucket of phrases) {
-                if (pct >= bucket.min) {
-                    return bucket.text[Math.floor(Math.random() * bucket.text.length)];
-                }
-            }
-            return 'Resultado inesperado — tente novamente!';
-        }
-
-        // Mapeamento de personalidade para valores de cálculo
-        const persMap = { 'Romântica': 6, 'Aventureira': 4, 'Intelectual': 3, 'Brincalhona': 2, 'Calma': 1 };
+        
+        const persMap = {
+            'Aventureiro(a)': 6, 'Calmo(a)': 4, 'Romântico(a)': 8, 'Intelectual': 5,
+            'Criativo(a)': 7, 'Leal': 9, 'Bem-humorado(a)': 6, 'Espontâneo(a)': 5,
+            'Observador(a)': 3, 'Otimista': 4, 'Realista': 2, 'Ambicioso(a)': 5,
+            'Extrovertido(a)': 7, 'Introvertido(a)': 2, 'Pessoa da Família': 8,
+            'Alegre': 5, 'Sereno(a)': 4, 'Protetor(a)': 8, 'Curioso(a)': 6,
+            'Empático(a)': 9, 'Resiliente': 7, 'Sincero(a)': 8, 'Gentil': 7,
+            'Espiritual': 6, 'Organizado(a)': 4, 'Desapegado(a)': 3, 'Comunicativo(a)': 5,
+            'Líder': 6
+        };
         const persOptions = Object.keys(persMap);
-        let currentPersField = null; // Guarda qual campo de personalidade está sendo editado (1 ou 2)
+        let currentPersField = null;
         let selectedPers1 = [];
         let selectedPers2 = [];
+        let photo1Url = null;
+        let photo2Url = null;
 
         function personalitySeed(chips) {
             let seed = 0;
             chips.forEach(c => seed += (persMap[c] || 0));
             return seed;
         }
+
+        const lovePhrases = [{
+            min: 95,
+            text: [
+                'Uma conexão mágica! A compatibilidade de vocês é de %%%. ❤️ Sintonizados em uma frequência única, vocês são raros.',
+                'Alma gêmea detectada! A sintonia é de %%%. 💞 O destino parece ter um plano incrível para vocês.',
+                'O amor de vocês é poético, uma melodia perfeita. Com %%% de sintonia, "Nossos corações dançam ao mesmo ritmo".',
+                'Um laço indestrutível! Com %%% de química, essa história de amor merece ser contada. ✨',
+                'Uma união digna de conto de fadas. Vocês têm %%% de compatibilidade e são a prova de que o amor verdadeiro existe. 💖'
+            ]
+        }, {
+            min: 80,
+            text: [
+                'Química poderosa! Essa conexão de %%% pode se tornar uma grande paixão. 🔥',
+                'Um encontro de almas vibrantes! Com %%%, o futuro de vocês promete uma jornada fascinante juntos.',
+                'O amor de vocês é como um jardim em florescimento: "Nossas vidas se entrelaçam em cores de carinho e paixão". A compatibilidade é de %%%.🌷',
+                'Potencial para um romance inesquecível! A compatibilidade de %%% é alta. Sigam o coração, ele não mente. 💫',
+                'A paixão entre vocês é intensa e promissora. Com %%% de sintonia, é uma chama que pode iluminar suas vidas. ✨'
+            ]
+        }, {
+            min: 65,
+            text: [
+                'Compatibilidade forte! A conexão de %%% é uma base sólida para construir algo bonito. 🏗️',
+                'Uma bela combinação! A atração de %%% entre vocês é visível. Vale a pena investir nesse sentimento. 😊',
+                'O relacionamento de vocês é um enigma a ser descoberto. A sintonia de %%% é um bom começo: "Em cada sorriso teu, um segredo de amor que guardo pra mim". ❤️',
+                'Uma conexão com muito potencial. Com %%% de compatibilidade, as diferenças podem se tornar grandes pontos de união. 🤝',
+                'Há uma forte afinidade. A compatibilidade de vocês é de %%%. Cultivem esse amor com paciência e dedicação. 🪴'
+            ]
+        }, {
+            min: 50,
+            text: [
+                'Uma mistura interessante! Com %%% de compatibilidade, com diálogo e abertura, pode florescer um grande amor. 🗣️',
+                'Talvez seja um caso de "opostos se atraem". Com %%% de química, o desafio pode ser a parte mais divertida da jornada. 🎲',
+                'O amor de vocês é um presente embrulhado. Com %%%, "Ainda que as diferenças tentem nos afastar, nosso laço se fortalece a cada olhar". 🎁',
+                'Uma compatibilidade moderada. Com %%%, o destino está na sua mão — o que vocês vão fazer com ela? 🤔',
+                'A relação de vocês é uma obra de arte. A sintonia de %%% é um começo: "Em cores de contrastes, pintamos nosso amor no infinito do tempo."🎨'
+            ]
+        }, {
+            min: 0,
+            text: [
+                'A vida é uma caixinha de surpresas! A afinidade de vocês é de %%%. Talvez a conexão esteja em algo que a gente nem imagina. 😮',
+                'Toda história de amor começa em algum lugar, e a de vocês pode estar apenas começando. A compatibilidade é de %%%. 🎬',
+                'A amizade é a base de todo relacionamento. Com %%% de sintonia, quem sabe essa amizade se torne algo mais? ✨',
+                'O que importa é a jornada e não o destino. Aproveitem o momento e as descobertas. A compatibilidade de vocês é de %%%. 🗺️',
+                'O amor de vocês é uma canção. A sintonia é de %%%: "Sem rimas perfeitas, nosso som é só nosso, e basta."🎶'
+            ]
+        }];
         
-        // --- Gerenciamento de Imagem para Compartilhar/Salvar ---
-        function renderCardToCanvas(title, badge, pct, msg, callback) {
+        const friendPhrases = [{
+            min: 95,
+            text: [
+                'Vocês são inseparáveis! A amizade de vocês é de %%%. 🤝 Uma conexão rara e de pura sintonia.',
+                'Melhores amigos para a vida! A afinidade é de %%%. A parceria de vocês é uma bênção. ✨',
+                'Uma amizade de milhões! Com %%%, "Juntos, transformamos o trivial em grandes aventuras".',
+                'Uma vibe incrível! Com %%% de sintonia, vocês têm uma conexão de alma que é a base de tudo. 🫂',
+                'Amizade de outro nível! A compatibilidade de vocês é de %%%. Que a parceria continue por muito tempo!'
+            ]
+        }, {
+            min: 80,
+            text: [
+                'Uma amizade forte e sincera! A vibe de vocês é de %%%. Há um respeito e um carinho poderosos.',
+                'Companheiros de aventuras! A sintonia de vocês é de %%%. Compartilham risadas e momentos inesquecíveis. 😄',
+                'A amizade de vocês é um porto seguro. Com %%%, "Sua presença é meu lugar de paz, onde o riso me encontra".',
+                'Uma amizade com muito futuro! Com %%% de afinidade, os melhores momentos ainda estão por vir. 🎉',
+                'Vibrações super positivas! A conexão de %%% é uma parceria que pode superar qualquer desafio. 💪'
+            ]
+        }, {
+            min: 65,
+            text: [
+                'Uma amizade promissora! A compatibilidade de %%% é uma ótima base para construir uma relação sólida.  фундамент',
+                'A afinidade é boa! Com %%%, vocês se entendem bem e têm muito o que compartilhar. 💬',
+                'A amizade de vocês é uma jornada de descobertas: "Ainda que as rotas se cruzem, nosso laço se fortalece a cada passo". A vibe é de %%%. 🛤️',
+                'Companheiros em potencial! A afinidade de %%% é um bom começo para uma amizade duradoura. 🌱',
+                'Uma conexão em crescimento. Com %%%, as diferenças podem se tornar grandes lições. 🌟'
+            ]
+        }, {
+            min: 50,
+            text: [
+                'Amizade em desenvolvimento! Com %%%, a vida pode ser mais divertida se passarem mais tempo juntos. 🥳',
+                'Vibrações mistas! A compatibilidade de %%% mostra que há espaço para se conhecerem melhor e encontrar interesses em comum. 🔎',
+                'A amizade de vocês é um novo capítulo. Com %%%, "Entre silêncios e falas, construímos um caminho só nosso". 📖',
+                'Uma vibe neutra. Com %%%, o destino está na sua mão, e a amizade pode florescer com o tempo. ⏳',
+                'A amizade de vocês é uma obra de arte: "Em cada nova conversa, uma nova cor para pintar o quadro da nossa amizade". A compatibilidade é de %%%. �️'
+            ]
+        }, {
+            min: 0,
+            text: [
+                'Talvez a amizade de vocês ainda esteja no começo. A compatibilidade é de %%%. O que importa é ter abertura para aprender um com o outro. 🤓',
+                'O que importa é a jornada e não o destino. A afinidade de vocês é de %%%. Aproveitem o momento e as descobertas. 🗺️',
+                'Sua amizade pode ser uma surpresa. Com %%%, "Mesmo com caminhos distintos, a gente se encontra para rir". 😄',
+                'Amigos de diferentes mundos! Com %%% de compatibilidade, vocês podem aprender muito um com o outro. 👽',
+                'A amizade de vocês é uma canção: "Sem rimas perfeitas, nosso som é só nosso, e basta". A afinidade é de %%%. 🎶'
+            ]
+        }];
+
+        function pickPhrase(pct, mode) {
+            const phrases = mode === 'friend' ? friendPhrases : lovePhrases;
+            for (const bucket of phrases) {
+                if (pct >= bucket.min) {
+                    const text = bucket.text[Math.floor(Math.random() * bucket.text.length)];
+                    return text.replace('%%%', pct);
+                }
+            }
+            return 'Resultado inesperado — tente novamente!';
+        }
+
+        // --- Canvas for Image Generation ---
+        function renderCardToCanvas(title, badge, pct, msg, photo1 = null, photo2 = null, callback) {
             const w = 900, h = 1200;
             const c = document.createElement('canvas');
             c.width = w; c.height = h;
@@ -625,34 +919,91 @@
             ctx.fillStyle = g;
             ctx.fillRect(0, 0, w, h);
 
+            // Card background
             ctx.fillStyle = 'rgba(255,255,255,0.06)';
             roundRect(ctx, 60, 90, w - 120, 220, 28);
             ctx.fill();
 
-            ctx.font = '120px Poppins, serif';
-            ctx.textAlign = 'center';
-            ctx.fillStyle = 'rgba(255,255,255,0.9)';
-            ctx.fillText('💞', w / 2, 200);
+            // Photos
+            const photoSize = 180;
+            const photoMargin = 30;
+            const photoY = 130;
+            
+            const p1 = new Image();
+            p1.onload = () => {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(w / 2 - photoSize / 2 - photoMargin / 2, photoY + photoSize / 2, photoSize / 2, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+                drawImageProp(ctx, p1, w / 2 - photoSize - photoMargin, photoY, photoSize, photoSize);
+                ctx.restore();
+            };
+            if (photo1) p1.src = photo1;
+            
+            const p2 = new Image();
+            p2.onload = () => {
+                ctx.save();
+                ctx.beginPath();
+                ctx.arc(w / 2 + photoSize / 2 + photoMargin / 2, photoY + photoSize / 2, photoSize / 2, 0, Math.PI * 2);
+                ctx.closePath();
+                ctx.clip();
+                drawImageProp(ctx, p2, w / 2 + photoMargin, photoY, photoSize, photoSize);
+                ctx.restore();
+            };
+            if (photo2) p2.src = photo2;
+            
+            let loadedCount = 0;
+            const checkLoad = () => {
+                loadedCount++;
+                if (loadedCount === (photo1 ? 1 : 0) + (photo2 ? 1 : 0)) {
+                    drawTextContent();
+                }
+            };
+            if (photo1) p1.addEventListener('load', checkLoad); else checkLoad();
+            if (photo2) p2.addEventListener('load', checkLoad); else checkLoad();
+            
+            function drawImageProp(ctx, img, x, y, w, h) {
+                const imgRatio = img.width / img.height;
+                const canvasRatio = w / h;
+                let sx, sy, sW, sH;
 
-            ctx.font = '36px Poppins, sans-serif';
-            ctx.fillStyle = 'white';
-            ctx.fillText(title, w / 2, 310);
+                if (imgRatio > canvasRatio) { // Image is wider than container
+                    sH = img.height;
+                    sW = img.height * canvasRatio;
+                    sx = (img.width - sW) / 2;
+                    sy = 0;
+                } else { // Image is taller or same aspect ratio
+                    sW = img.width;
+                    sH = img.width / canvasRatio;
+                    sx = 0;
+                    sy = (img.height - sH) / 2;
+                }
+                ctx.drawImage(img, sx, sy, sW, sH, x, y, w, h);
+            }
+            
+            function drawTextContent() {
+                ctx.font = '36px Poppins, sans-serif';
+                ctx.textAlign = 'center';
+                ctx.fillStyle = 'white';
+                ctx.fillText(badge, w / 2, 380);
+                
+                ctx.font = '28px Poppins';
+                ctx.fillStyle = 'rgba(255,255,255,0.95)';
+                ctx.fillText(title, w / 2, 430);
 
-            ctx.font = '28px Poppins';
-            ctx.fillStyle = 'rgba(255,255,255,0.95)';
-            ctx.fillText(badge, w / 2, 380);
+                ctx.font = '160px Poppins';
+                ctx.fillStyle = '#ff6aa0';
+                ctx.fillText(pct + '%', w / 2, 700);
+                
+                ctx.font = '28px Poppins';
+                wrapText(ctx, msg, w / 2, 850, w - 200, 36);
 
-            ctx.font = '160px Poppins';
-            ctx.fillStyle = '#ff6aa0';
-            ctx.fillText(pct + '%', w / 2, 640);
-
-            ctx.font = '28px Poppins';
-            wrapText(ctx, msg, w / 2, 760, w - 200, 36);
-
-            ctx.font = '18px Poppins';
-            ctx.fillStyle = 'rgba(255,255,255,0.6)';
-            ctx.fillText('Love Tester • Divirta-se ✨', w / 2, h - 80);
-            c.toBlob(blob => callback(blob));
+                ctx.font = '18px Poppins';
+                ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                ctx.fillText('Love Tester • App', w / 2, h - 80);
+                c.toBlob(blob => callback(blob));
+            }
 
             function roundRect(ctx, x, y, w, h, r) {
                 if (w < 2 * r) r = w / 2;
@@ -676,14 +1027,14 @@
                     test = line + words[n] + ' ';
                     const metrics = ctx.measureText(test);
                     if (metrics.width > maxWidth && n > 0) {
-                        ctx.fillText(line, x, curY);
+                        ctx.fillText(line.trim(), x, curY);
                         line = words[n] + ' ';
                         curY += lineHeight;
                     } else {
                         line = test;
                     }
                 }
-                ctx.fillText(line, x, curY);
+                ctx.fillText(line.trim(), x, curY);
             }
         }
 
@@ -698,7 +1049,7 @@
             URL.revokeObjectURL(url);
         }
         
-        // --- Lógica do Histórico (localStorage) ---
+        // --- History Logic (localStorage) ---
         const HISTORY_KEY = 'loveTesterHistory';
 
         function getHistory() {
@@ -758,7 +1109,6 @@
             });
         }
         
-        // Listener para ações nos itens do histórico (download/delete)
         document.getElementById('historyList').addEventListener('click', (e) => {
             const target = e.target.closest('button');
             if (!target) return;
@@ -770,10 +1120,12 @@
                 const item = currentHistory.find(i => i.id === itemId);
                 if (item) {
                     renderCardToCanvas(
-                        item.mode === 'Avançado' ? 'Amor Avançado' : 'Amor Simples',
+                        titles[item.mode],
                         `${item.a} + ${item.b}`,
                         item.pct,
                         item.msg,
+                        item.photo1,
+                        item.photo2,
                         blob => saveBlob(blob, `history-${item.a}-${item.b}.png`)
                     );
                 }
@@ -786,7 +1138,6 @@
             }
         });
 
-        // Listener para o botão de limpar histórico
         document.getElementById('clearHistory').addEventListener('click', () => {
              showModal('Confirmar', 'Tem certeza que deseja limpar todo o histórico?', () => {
                  localStorage.removeItem(HISTORY_KEY);
@@ -794,7 +1145,45 @@
              });
         });
 
-        // --- Lógica do Modo Simples ---
+        // --- Animations ---
+        function animatePercentage(elementId, finalValue) {
+            const element = document.getElementById(elementId);
+            let startValue = 0;
+            const duration = 1000;
+            const startTime = performance.now();
+
+            function update() {
+                const elapsed = performance.now() - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                const currentValue = Math.floor(progress * finalValue);
+                element.textContent = currentValue;
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                } else {
+                    element.textContent = finalValue;
+                }
+            }
+            requestAnimationFrame(update);
+        }
+        
+        function createHeartParticles() {
+            const emojis = ['💖', '✨', '💞', '❤️', '🌟', '🥰', '😍', '😘', '🤩'];
+            for (let i = 0; i < 25; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'heart-particle';
+                particle.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+                particle.style.left = `${Math.random() * 100}%`;
+                particle.style.animationDelay = `${Math.random() * 2}s`;
+                particle.style.animationDuration = `${3 + Math.random() * 2}s`;
+                heartParticlesContainer.appendChild(particle);
+
+                particle.addEventListener('animationend', () => {
+                    particle.remove();
+                });
+            }
+        }
+
+        // --- Simple Mode Logic ---
         document.getElementById('calcSimple').addEventListener('click', () => {
             const a = document.getElementById('s_nome1').value.trim();
             const b = document.getElementById('s_nome2').value.trim();
@@ -803,11 +1192,13 @@
                 return;
             }
             const pct = deterministicPercent(a, b, 0);
-            const msg = pickPhrase(pct);
-            document.getElementById('percentSimple').textContent = pct + '%';
+            const msg = pickPhrase(pct, 'love');
+            
+            animatePercentage('percentSimple', pct);
             document.getElementById('badgeSimple').textContent = `${a} + ${b}`;
             document.getElementById('msgSimple').textContent = msg;
-            saveToHistory({ mode: 'Simples', a, b, pct, msg });
+            saveToHistory({ mode: 'simple', a, b, pct, msg });
+            createHeartParticles();
         });
 
         document.getElementById('saveSimple').addEventListener('click', () => {
@@ -817,9 +1208,9 @@
                 showModal('Sem Resultado', 'Calcule um resultado antes de salvar.', null, true);
                 return;
             }
-            const pct = document.getElementById('percentSimple').textContent.replace('%', '');
+            const pct = document.getElementById('percentSimple').textContent;
             const msg = document.getElementById('msgSimple').textContent;
-            renderCardToCanvas('Amor Simples', `${a} + ${b}`, pct, msg, blob => saveBlob(blob, `love-${a}-${b}.png`));
+            renderCardToCanvas('Conexão de Almas', `${a} + ${b}`, pct, msg, null, null, blob => saveBlob(blob, `love-${a}-${b}.png`));
         });
 
         document.getElementById('shareSimple').addEventListener('click', () => {
@@ -829,13 +1220,13 @@
                 showModal('Sem Resultado', 'Calcule um resultado antes de compartilhar.', null, true);
                 return;
             }
-            const pct = document.getElementById('percentSimple').textContent.replace('%', '');
+            const pct = document.getElementById('percentSimple').textContent;
             const msg = document.getElementById('msgSimple').textContent;
-            renderCardToCanvas('Amor Simples', `${a} + ${b}`, pct, msg, async (blob) => {
+            renderCardToCanvas('Conexão de Almas', `${a} + ${b}`, pct, msg, null, null, async (blob) => {
                 const filesArray = [new File([blob], `love-${a}-${b}.png`, { type: blob.type })];
                 if (navigator.canShare && navigator.canShare({ files: filesArray })) {
                     try {
-                        await navigator.share({ files: filesArray, title: 'Love Tester • Simples', text: `${a} + ${b}` });
+                        await navigator.share({ files: filesArray, title: 'Conexão de Almas', text: `${a} + ${b}` });
                         return;
                     } catch (e) {
                         console.warn(e);
@@ -854,16 +1245,15 @@
         document.getElementById('clearSimple').addEventListener('click', () => {
             document.getElementById('s_nome1').value = '';
             document.getElementById('s_nome2').value = '';
-            document.getElementById('percentSimple').textContent = '—';
+            document.getElementById('percentSimple').textContent = '0';
             document.getElementById('msgSimple').textContent = 'Preencha os nomes e toque em Calcular.';
             document.getElementById('badgeSimple').textContent = '—';
         });
 
-        // --- Lógica do Modo Avançado ---
-        // Funções para gerenciar o modal de personalidade
+        // --- Advanced Mode Logic ---
         function renderPersonalityChips(containerId, activeTraits) {
             const container = document.getElementById(containerId);
-            container.innerHTML = ''; // Limpa o conteúdo anterior
+            container.innerHTML = '';
             persOptions.forEach(trait => {
                 const chip = document.createElement('button');
                 chip.textContent = trait;
@@ -905,6 +1295,32 @@
             }
             document.getElementById('modalPersonality').classList.remove('open');
         });
+        
+        // Photo upload logic
+        document.getElementById('a_foto1').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photo1Url = e.target.result;
+                    document.getElementById('a_foto1_preview').src = photo1Url;
+                    document.getElementById('a_foto1_preview').classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+        document.getElementById('a_foto2').addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    photo2Url = e.target.result;
+                    document.getElementById('a_foto2_preview').src = photo2Url;
+                    document.getElementById('a_foto2_preview').classList.add('active');
+                };
+                reader.readAsDataURL(file);
+            }
+        });
 
 
         document.getElementById('calcAdvanced').addEventListener('click', () => {
@@ -921,17 +1337,17 @@
                 selectedPers1.forEach(x => {
                     if (selectedPers2.includes(x)) bonus += 5;
                 });
-                if (selectedPers1.includes('Aventureira') && selectedPers2.includes('Calma')) bonus += 3;
+                if (selectedPers1.includes('Aventureiro(a)') && selectedPers2.includes('Calmo(a)')) bonus += 3;
                 if (selectedPers1.includes('Intelectual') && selectedPers2.includes('Intelectual')) bonus += 4;
             }
             const pct = Math.min(100, Math.max(0, pctBase + bonus));
-            const baseMsg = pickPhrase(pct);
-            const personalitySummary = `Personalidades: ${selectedPers1.join(', ') || 'Nenhuma'} e ${selectedPers2.join(', ') || 'Nenhuma'}.`;
-            const msg = `${baseMsg} ${personalitySummary}`;
-            document.getElementById('percentAdvanced').textContent = pct + '%';
+            const msg = pickPhrase(pct, 'love');
+            
+            animatePercentage('percentAdvanced', pct);
             document.getElementById('badgeAdvanced').textContent = `${a} + ${b}`;
             document.getElementById('msgAdvanced').textContent = msg;
-            saveToHistory({ mode: 'Avançado', a, b, pct, msg, pers1: selectedPers1, pers2: selectedPers2 });
+            saveToHistory({ mode: 'advanced', a, b, pct, msg, photo1: photo1Url, photo2: photo2Url });
+            createHeartParticles();
         });
 
         document.getElementById('saveAdvanced').addEventListener('click', () => {
@@ -941,9 +1357,9 @@
                 showModal('Sem Resultado', 'Calcule um resultado antes de salvar.', null, true);
                 return;
             }
-            const pct = document.getElementById('percentAdvanced').textContent.replace('%', '');
+            const pct = document.getElementById('percentAdvanced').textContent;
             const msg = document.getElementById('msgAdvanced').textContent;
-            renderCardToCanvas('Amor Avançado', `${a} + ${b}`, pct, msg, blob => saveBlob(blob, `love-adv-${a}-${b}.png`));
+            renderCardToCanvas('Química Perfeita', `${a} + ${b}`, pct, msg, photo1Url, photo2Url, blob => saveBlob(blob, `love-adv-${a}-${b}.png`));
         });
 
         document.getElementById('shareAdvanced').addEventListener('click', () => {
@@ -953,13 +1369,13 @@
                 showModal('Sem Resultado', 'Calcule um resultado antes de compartilhar.', null, true);
                 return;
             }
-            const pct = document.getElementById('percentAdvanced').textContent.replace('%', '');
+            const pct = document.getElementById('percentAdvanced').textContent;
             const msg = document.getElementById('msgAdvanced').textContent;
-            renderCardToCanvas('Amor Avançado', `${a} + ${b}`, pct, msg, async (blob) => {
+            renderCardToCanvas('Química Perfeita', `${a} + ${b}`, pct, msg, photo1Url, photo2Url, async (blob) => {
                 const filesArray = [new File([blob], `love-adv-${a}-${b}.png`, { type: blob.type })];
                 if (navigator.canShare && navigator.canShare({ files: filesArray })) {
                     try {
-                        await navigator.share({ files: filesArray, title: 'Love Tester • Avançado', text: `${a} + ${b}` });
+                        await navigator.share({ files: filesArray, title: 'Química Perfeita', text: `${a} + ${b}` });
                         return;
                     } catch (e) {
                         console.warn(e);
@@ -975,12 +1391,86 @@
             document.getElementById('a_nome2').value = '';
             selectedPers1 = [];
             selectedPers2 = [];
+            photo1Url = null;
+            photo2Url = null;
+            document.getElementById('a_foto1_preview').src = '';
+            document.getElementById('a_foto1_preview').classList.remove('active');
+            document.getElementById('a_foto2_preview').src = '';
+            document.getElementById('a_foto2_preview').classList.remove('active');
             document.getElementById('selectedPers1').textContent = '';
             document.getElementById('selectedPers2').textContent = '';
-            document.getElementById('percentAdvanced').textContent = '—';
+            document.getElementById('percentAdvanced').textContent = '0';
             document.getElementById('msgAdvanced').textContent = 'Selecione personalidades para um resultado mais detalhado.';
             document.getElementById('badgeAdvanced').textContent = '—';
         });
+        
+        // --- Friend Mode Logic ---
+        document.getElementById('calcFriend').addEventListener('click', () => {
+            const a = document.getElementById('f_nome1').value.trim();
+            const b = document.getElementById('f_nome2').value.trim();
+            if (!a || !b) {
+                showModal('Campos Vazios', 'Por favor, preencha os dois nomes para calcular.', null, true);
+                return;
+            }
+            const pct = deterministicPercent(a, b, 1); // Use a different seed
+            const msg = pickPhrase(pct, 'friend');
+            
+            animatePercentage('percentFriend', pct);
+            document.getElementById('badgeFriend').textContent = `${a} + ${b}`;
+            document.getElementById('msgFriend').textContent = msg;
+            saveToHistory({ mode: 'friend', a, b, pct, msg });
+            createHeartParticles();
+        });
+
+        document.getElementById('saveFriend').addEventListener('click', () => {
+            const a = document.getElementById('f_nome1').value.trim();
+            const b = document.getElementById('f_nome2').value.trim();
+            if (!a || !b) {
+                showModal('Sem Resultado', 'Calcule um resultado antes de salvar.', null, true);
+                return;
+            }
+            const pct = document.getElementById('percentFriend').textContent;
+            const msg = document.getElementById('msgFriend').textContent;
+            renderCardToCanvas('Vibe de Amizade', `${a} + ${b}`, pct, msg, null, null, blob => saveBlob(blob, `friend-${a}-${b}.png`));
+        });
+
+        document.getElementById('shareFriend').addEventListener('click', () => {
+            const a = document.getElementById('f_nome1').value.trim();
+            const b = document.getElementById('f_nome2').value.trim();
+            if (!a || !b) {
+                showModal('Sem Resultado', 'Calcule um resultado antes de compartilhar.', null, true);
+                return;
+            }
+            const pct = document.getElementById('percentFriend').textContent;
+            const msg = document.getElementById('msgFriend').textContent;
+            renderCardToCanvas('Vibe de Amizade', `${a} + ${b}`, pct, msg, null, null, async (blob) => {
+                const filesArray = [new File([blob], `friend-${a}-${b}.png`, { type: blob.type })];
+                if (navigator.canShare && navigator.canShare({ files: filesArray })) {
+                    try {
+                        await navigator.share({ files: filesArray, title: 'Vibe de Amizade', text: `${a} + ${b}` });
+                        return;
+                    } catch (e) {
+                        console.warn(e);
+                    }
+                }
+                saveBlob(blob, `friend-${a}-${b}.png`);
+                showModal('Compartilhamento', 'A imagem foi baixada. Compartilhe manualmente!');
+            });
+        });
+
+        document.getElementById('swapFriend').addEventListener('click', () => {
+            const t = document.getElementById('f_nome1').value;
+            document.getElementById('f_nome1').value = document.getElementById('f_nome2').value;
+            document.getElementById('f_nome2').value = t;
+        });
+        document.getElementById('clearFriend').addEventListener('click', () => {
+            document.getElementById('f_nome1').value = '';
+            document.getElementById('f_nome2').value = '';
+            document.getElementById('percentFriend').textContent = '0';
+            document.getElementById('msgFriend').textContent = 'Preencha os nomes e toque em Calcular.';
+            document.getElementById('badgeFriend').textContent = '—';
+        });
+
 
         // Eventos dos botões do modal de escolha de teste
         document.getElementById('btnSimpleChoice').addEventListener('click', () => {
@@ -991,6 +1481,11 @@
         document.getElementById('btnAdvancedChoice').addEventListener('click', () => {
             document.getElementById('modalTestChoice').classList.remove('open');
             showScreen('advanced');
+        });
+        
+        document.getElementById('btnFriendChoice').addEventListener('click', () => {
+            document.getElementById('modalTestChoice').classList.remove('open');
+            showScreen('friend');
         });
 
         // Inicia o app na tela inicial
